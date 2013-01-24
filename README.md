@@ -16,8 +16,8 @@ heroku create
 heroku addons:add scheduler:standard
 heroku addons:add redistogo:nano
 # Add configuration
-heroku config:add feed_url='<github-private-feed-url>' # "News Feed" on the GitHub start page
-heroku config:add username='<github-username>'
+heroku config:add gh_feed_url='<github-private-feed-url>' # "News Feed" on the GitHub start page
+heroku config:add gh_username='<github-username>'
 heroku config:add prowl_api_key='<prowl-api-key>'
 
 # Push to heroku
@@ -40,8 +40,8 @@ git clone https://github.com/pstadler/octoprowl.git && cd octoprowl
 bundle install
 
 # Configuration
-export feed_url='<github-private-feed-url>' # "News Feed" on the GitHub start page
-export username='<github-username>'
+export gh_feed_url='<github-private-feed-url>' # "News Feed" on the GitHub start page
+export gh_username='<github-username>'
 export prowl_api_key='<prowl-api-key>'
 
 # Run it

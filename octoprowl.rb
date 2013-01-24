@@ -16,22 +16,22 @@ module Octoprowl
       @cache = Cache.new
     end
 
-    def scan(feed_url, username)
-      last_scan = Time.parse(@cache.get("octoprowl:#{username}:last_scanned_item") || Time.now.to_s)
-      f = Feedzirra::Feed.fetch_and_parse(feed_url)
+    def scan(gh_feed_url, gh_username)
+      last_scan = Time.parse(@cache.get("octoprowl:#{gh_username}:last_scan_time") || Time.now.to_s)
+      f = Feedzirra::Feed.fetch_and_parse(gh_feed_url)
       abort "Error: Couldn't fetch feed (#{f})" if f.is_a? Fixnum
       num_matches = 0
       f.entries.each do |entry|
-        num_matches = num_matches + 1 if process_entry(entry, username, last_scan)
+        num_matches = num_matches + 1 if process_entry(entry, gh_username, last_scan)
       end
-      @cache.set("octoprowl:#{username}:last_scanned_item", Time.now)
+      @cache.set("octoprowl:#{gh_username}:last_scan_time", Time.now)
       num_matches
     end
 
     @private
-    def process_entry(entry, look_for, last_scan)
+    def process_entry(entry, gh_username, last_scan)
       return if (entry.published <=> last_scan) == -1
-      if entry.title =~ /(#{MATCH_WORDS.join('|')})[a-z]* #{look_for}/
+      if entry.title =~ /(#{MATCH_WORDS.join('|')})[a-z]* #{gh_username}/
         if @p
           @p.add(:event => 'Awesome!', :description => entry.title)
         else
